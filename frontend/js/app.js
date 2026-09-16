@@ -136,46 +136,140 @@ async function stopRecording() {
 
         } else {
 
-             const message = data.command?.message || "";
+            let message = data.command?.message || "";
 
-             command.textContent = message;
+            if (data.command?.snags) {
 
-             speak(message);
+                const count = data.command.snags.length;
+
+                if (count === 0) {
+
+                    message = "I couldn't find any matching snags.";
+
+                } else if (count === 1) {
+
+                    message = "I found 1 snag.";
+
+                } else {
+
+                    message = `I found ${count} snags.`;
+
+                }
+            }
+
+            command.textContent = message;
+
+            speak(message);
 
         }
 
             searchResults.innerHTML = "";
 
+
+            // --------------------------------
+            // Search results
+            // --------------------------------
+
             if (data.command?.snags) {
 
                 if (data.command.snags.length === 0) {
 
-                    searchResults.textContent = "No snags found.";
+                    searchResults.textContent =
+                        "No snags found.";
 
                 } else {
 
-                    const heading = document.createElement("h3");
-                    heading.textContent = `Search Results (${data.command.count})`;
+                    const heading =
+                        document.createElement("h3");
+
+                    heading.textContent =
+                        `Search Results (${data.command.count})`;
 
                     searchResults.appendChild(heading);
 
-                    data.command.snags.forEach((snag, index) => {
+                    data.command.snags.forEach(
+                        (snag, index) => {
 
-                        const snagElement = document.createElement("div");
+                            const snagElement =
+                                document.createElement("div");
+
+                            snagElement.innerHTML = `
+                                <p>
+                                    <strong>Snag ${index + 1}</strong><br>
+                                    Location:
+                                    ${snag.location || "N/A"}<br>
+
+                                    Issue:
+                                    ${snag.issue || "N/A"}<br>
+
+                                    Assignee:
+                                    ${snag.assignee || "N/A"}<br>
+
+                                    Status:
+                                    ${snag.status || "N/A"}
+                                </p>
+                            `;
+
+                            searchResults.appendChild(
+                                snagElement
+                            );
+                        }
+                    );
+                }
+            }
+
+
+            // --------------------------------
+            // Delete candidates
+            // --------------------------------
+
+            if (data.command?.matches) {
+
+                const matches =
+                    data.command.matches;
+
+                const heading =
+                    document.createElement("h3");
+
+                heading.textContent =
+                    `Matching Snags (${matches.length})`;
+
+                searchResults.appendChild(
+                    heading
+                );
+
+
+                matches.forEach(
+                    (snag, index) => {
+
+                        const snagElement =
+                            document.createElement("div");
 
                         snagElement.innerHTML = `
                             <p>
-                                <strong>Snag ${index + 1}</strong><br>
-                                Location: ${snag.location || "N/A"}<br>
-                                Issue: ${snag.issue || "N/A"}<br>
-                                Assignee: ${snag.assignee || "N/A"}<br>
-                                Status: ${snag.status || "N/A"}
+                                <strong>
+                                    Snag ${index + 1}
+                                </strong><br>
+
+                                Location:
+                                ${snag.location || "N/A"}<br>
+
+                                Issue:
+                                ${snag.issue || "N/A"}<br>
+
+                                Assignee:
+                                ${snag.assignee || "N/A"}<br>
+
+                                Status:
+                                ${snag.status || "N/A"}
                             </p>
                         `;
 
-                        searchResults.appendChild(snagElement);
-                    });
-                }
+                        searchResults.appendChild(
+                            snagElement
+                        );
+                    }
+                );
             }
 
             setStatus("Done!", "done");

@@ -13,6 +13,62 @@ def extract_entities(text: str) -> dict:
     }
 
     # --------------------------------
+    # Extract assignee first
+    # --------------------------------
+
+    assign_match = re.search(
+        r"\b(?:assign(?:ed)?\s+(?:it\s+)?to)\s+"
+        r"(?:the\s+)?(.+?)$",
+        text
+    )
+
+    if assign_match:
+        entities["assignee"] = assign_match.group(1).strip()
+
+
+    # --------------------------------
+    # Extract assignee from search
+    # --------------------------------
+
+    search_assignee_match = re.search(
+        r"\b(?:assigned\s+to|for)\s+"
+        r"(?:the\s+)?(.+?)$",
+        text
+    )
+
+    if search_assignee_match and (
+        "find" in text
+        or "search" in text
+        or "show" in text
+        or "list" in text
+    ):
+
+        possible_assignee = search_assignee_match.group(1).strip()
+
+        # Words that usually indicate a person/team/contractor
+        assignee_words = [
+            "contractor",
+            "supervisor",
+            "worker",
+            "team",
+            "manager",
+            "electrician",
+            "plumber",
+            "carpenter",
+            "painter",
+            "flooring",
+            "plumbing",
+            "electrical"
+        ]
+
+        if any(
+            word in possible_assignee
+            for word in assignee_words
+        ):
+            entities["assignee"] = possible_assignee
+
+
+    # --------------------------------
     # Extract location
     # --------------------------------
 
@@ -23,7 +79,11 @@ def extract_entities(text: str) -> dict:
     )
 
     if location_match:
-        entities["location"] = location_match.group(1).strip()
+        possible_location = location_match.group(1).strip()
+
+        # Don't treat an assignee as a location
+        if possible_location != entities["assignee"]:
+            entities["location"] = possible_location
         
     # --------------------------------
     # Extract location from update command
@@ -70,25 +130,13 @@ def extract_entities(text: str) -> dict:
 
     for issue in issue_words:
 
-        if issue in text:
+        if re.search(rf"\b{re.escape(issue)}\b", text):
 
             entities["issue"] = issue
             break
 
-    # --------------------------------
-    # Extract assignee
-    # --------------------------------
 
-    assign_match = re.search(
-        r"\b(?:assign(?:ed)?\s+to)\s+"
-        r"(?:the\s+)?(.+?)"
-        r"(?=\s+(?:in|at|for|with|status|to|as)\b|$)",
-        text
-    )
-
-    if assign_match:
-
-        entities["assignee"] = assign_match.group(1).strip()
+    ()
 
     # --------------------------------
     # Extract status

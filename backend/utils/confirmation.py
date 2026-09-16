@@ -3,6 +3,12 @@ pending_command = {
     "entities": None
 }
 
+pending_delete_matches = []
+
+last_command ={
+    "intent": None,
+    "entities": None
+}
 
 def needs_confirmation(intent: str) -> bool:
     """
@@ -56,7 +62,8 @@ def is_confirmation(text: str) -> bool:
         "okay",
         "ok",
         "confirm",
-        "do it"
+        "do it",
+        "ya"
     ]
     
     text = text.lower().strip()
@@ -103,3 +110,40 @@ def clear_pending_command():
     
     pending_command["intent"] = None
     pending_command["entities"] = None
+    
+def set_last_command(intent: str, entities: dict):
+
+    last_command["intent"] = intent
+    last_command["entities"] = entities.copy()
+
+
+def get_last_command():
+
+    return (
+        last_command["intent"],
+        last_command["entities"]
+    )
+
+
+def clear_last_command():
+
+    last_command["intent"] = None
+    last_command["entities"] = None
+    
+def set_pending_delete_matches(matches):
+
+    global pending_delete_matches
+
+    pending_delete_matches = matches
+
+
+def get_pending_delete_matches():
+
+    return pending_delete_matches
+
+
+def clear_pending_delete_matches():
+
+    global pending_delete_matches
+
+    pending_delete_matches = []

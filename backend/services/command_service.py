@@ -145,7 +145,8 @@ def update_snag(entities: dict):
     return {
         "success": True,
         "message": "Snag updated successfully",
-        "modified_count": result.modified_count
+        "modified_count": result.modified_count,
+        "updated": update_data
     }
     
 def delete_snag(entities: dict):
@@ -183,13 +184,27 @@ def delete_snag(entities: dict):
 
     # Multiple matching snags
     if len(matching_snags) > 1:
+
+        matches = []
+
+        for snag in matching_snags:
+
+            matches.append({
+                "id": str(snag["_id"]),
+                "location": snag.get("location"),
+                "issue": snag.get("issue"),
+                "assignee": snag.get("assignee"),
+                "status": snag.get("status")
+            })
+
         return {
             "success": False,
             "message": (
                 f"I found {len(matching_snags)} matching snags. "
-                "Please provide more details before deleting."
+                "Please tell me which one you want to delete."
             ),
-            "count": len(matching_snags)
+            "count": len(matching_snags),
+            "matches": matches
         }
 
     # Exactly one matching snag
