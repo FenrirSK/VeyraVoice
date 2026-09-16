@@ -113,7 +113,7 @@ async function stopRecording() {
         );
 
         const response = await fetch(
-            "http://127.0.0.1:8000/voice",
+            "https://veyravoice.onrender.com/voice",
             {
                 method: "POST",
                 body: formData
