@@ -4,7 +4,10 @@ const statusIndicator = document.getElementById("statusIndicator");
 const statusDot = document.getElementById("statusDot");
 const result = document.getElementById("result");
 const intent = document.getElementById("intent");
-const entities = document.getElementById("entities");
+const entityLocation = document.getElementById("entityLocation");
+const entityIssue = document.getElementById("entityIssue");
+const entityAssignee = document.getElementById("entityAssignee");
+const entityStatus = document.getElementById("entityStatus");
 const command = document.getElementById("command");
 const searchResults = document.getElementById("searchResults");
 
@@ -141,7 +144,17 @@ async function stopRecording() {
 
             result.textContent = data.text;
             intent.textContent = data.intent;
-            entities.textContent = JSON.stringify(data.entities);
+            entityLocation.textContent =
+                data.entities?.location || "Not specified";
+
+            entityIssue.textContent =
+                data.entities?.issue || "Not specified";
+
+            entityAssignee.textContent =
+                data.entities?.assignee || "Not specified";
+
+            entityStatus.textContent =
+                data.entities?.status || "Not specified";
         if (data.confirmation_required) {
 
             command.textContent = data.confirmation_message;
