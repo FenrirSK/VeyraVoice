@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 ```
-<title>Veyra</title>
+<title>Veyra — Voice Project Assistant</title>
 
 <link rel="stylesheet" href="css/style.css">
 ```
@@ -16,84 +16,200 @@
 <body>
 
 ```
-<div class="container">
+<div class="app">
 
+    <!-- Header -->
     <header class="header">
-        <div class="logo">Veyra</div>
-        <p class="subtitle">
-            Voice-powered project assistant
-        </p>
+
+        <div class="brand">
+            <div class="brand-icon">V</div>
+
+            <div>
+                <h1>Veyra</h1>
+                <p>Voice Project Assistant</p>
+            </div>
+        </div>
+
+        <div class="connection">
+            <span class="connection-dot"></span>
+            System Ready
+        </div>
+
     </header>
 
 
-    <section class="voice-section">
+    <!-- Main -->
+    <main class="main">
 
-        <button id="recordButton">
-            🎙️ Start Recording
-        </button>
+        <!-- Hero / Voice Control -->
+        <section class="voice-section">
 
-        <div id="statusIndicator">
-            <span id="statusDot"></span>
-            <span id="status">Ready</span>
-        </div>
+            <div class="hero-content">
 
-    </section>
+                <span class="eyebrow">VOICE COMMAND CENTER</span>
 
+                <h2>
+                    Talk to your
+                    <span>project.</span>
+                </h2>
 
-    <section class="results">
+                <p>
+                    Create, update, search and manage project tasks
+                    using natural voice commands.
+                </p>
 
-        <div class="card">
-            <h2>Recognized Command</h2>
-
-            <p id="result">
-                —
-            </p>
-        </div>
+            </div>
 
 
-        <div class="card">
+            <div class="voice-control">
 
-            <h2>Understanding</h2>
+                <button id="recordButton" class="record-button">
 
-            <div class="entity-grid">
+                    <span class="mic-icon">🎙</span>
 
-                <div class="entity">
-                    <strong>Intent</strong>
-                    <span id="intent">—</span>
-                </div>
+                    <span class="record-text">
+                        Start Recording
+                    </span>
 
-                <div class="entity">
-                    <strong>Entities</strong>
-                    <span id="entities">—</span>
+                </button>
+
+                <div id="statusIndicator" class="status-indicator">
+
+                    <span id="statusDot" class="status-dot"></span>
+
+                    <span id="status">Ready</span>
+
                 </div>
 
             </div>
 
-        </div>
+        </section>
 
 
-        <div class="card">
+        <!-- Results -->
+        <section class="results">
 
-            <h2>Veyra Response</h2>
+            <!-- Recognized Command -->
+            <div class="card command-card">
 
-            <p id="command">
-                —
-            </p>
+                <div class="card-header">
 
-        </div>
+                    <div>
+                        <span class="card-label">01</span>
+                        <h3>Recognized Command</h3>
+                    </div>
 
+                    <span class="card-icon">◉</span>
 
-        <div class="card">
+                </div>
 
-            <h2>Search Results</h2>
+                <p id="result" class="result-text">
+                    —
+                </p>
 
-            <div id="searchResults">
-                No search performed yet.
             </div>
 
-        </div>
 
-    </section>
+            <!-- Understanding -->
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+                        <span class="card-label">02</span>
+                        <h3>Understanding</h3>
+                    </div>
+
+                    <span class="card-icon">✦</span>
+
+                </div>
+
+                <div class="entity-grid">
+
+                    <div class="entity">
+
+                        <span class="entity-label">
+                            Intent
+                        </span>
+
+                        <strong id="intent">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="entity">
+
+                        <span class="entity-label">
+                            Entities
+                        </span>
+
+                        <strong id="entities">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Response -->
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+                        <span class="card-label">03</span>
+                        <h3>Veyra Response</h3>
+                    </div>
+
+                    <span class="card-icon">↗</span>
+
+                </div>
+
+                <p id="command" class="result-text">
+                    —
+                </p>
+
+            </div>
+
+
+            <!-- Search -->
+            <div class="card search-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <span class="card-label">04</span>
+                        <h3>Search Results</h3>
+                    </div>
+
+                    <span class="card-icon">⌕</span>
+
+                </div>
+
+                <div id="searchResults" class="search-results">
+                    No search performed yet.
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <span>VEYRA</span>
+
+        <span>Voice-powered project intelligence</span>
+
+    </footer>
 
 </div>
 

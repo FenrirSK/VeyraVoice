@@ -33,52 +33,66 @@ recordButton.addEventListener("click", async () => {
 // Start recording
 async function startRecording() {
 
-    try {
 
-        stream = await navigator.mediaDevices.getUserMedia({
-            audio: true
-        });
+try {
 
-        audioContext = new AudioContext();
+    stream = await navigator.mediaDevices.getUserMedia({
+        audio: true
+    });
 
-        source = audioContext.createMediaStreamSource(stream);
+    audioContext = new AudioContext();
 
-        processor = audioContext.createScriptProcessor(
-            4096,
-            1,
-            1
+    source = audioContext.createMediaStreamSource(stream);
+
+    processor = audioContext.createScriptProcessor(
+        4096,
+        1,
+        1
+    );
+
+    audioData = [];
+
+    processor.onaudioprocess = (event) => {
+
+        const channelData =
+            event.inputBuffer.getChannelData(0);
+
+        audioData.push(
+            new Float32Array(channelData)
         );
+    };
 
-        audioData = [];
+    source.connect(processor);
+    processor.connect(audioContext.destination);
 
-        processor.onaudioprocess = (event) => {
+    isRecording = true;
 
-            const channelData =
-                event.inputBuffer.getChannelData(0);
+    recordButton.innerHTML = `
+        <span class="mic-icon">⏹</span>
+        <span class="record-text">Stop Recording</span>
+    `;
 
-            audioData.push(
-                new Float32Array(channelData)
-            );
-        };
+    setStatus(
+        "Listening... Speak now!",
+        "listening"
+    );
 
-        source.connect(processor);
-        processor.connect(audioContext.destination);
+    result.textContent = "";
 
-        isRecording = true;
+} catch (error) {
 
-        recordButton.textContent = "⏹ Stop Recording";
-        setStatus("Listening... Speak now!", "listening");
-        result.textContent = "";
+    console.error(error);
 
-    } catch (error) {
+    setStatus(
+        "Could not access microphone.",
+        ""
+    );
 
-        console.error(error);
-
-        status.textContent =
-            "Could not access microphone.";
-
-    }
 }
+
+
+}
+
 
 
 // Stop recording
@@ -275,8 +289,10 @@ async function stopRecording() {
             setStatus("Done!", "done");
         } else {
 
-            status.textContent =
-                "Speech recognition failed.";
+            setStatus(
+                 "Speech recognition failed.",
+                 ""
+            );
 
         }
 
@@ -284,13 +300,18 @@ async function stopRecording() {
 
         console.error(error);
 
-        status.textContent =
-            "Could not connect to server.";
+      setStatus(
+            "Could not connect to server.",
+            ""
+        );
 
     }
 
     recordButton.disabled = false;
-    recordButton.textContent = " Start Recording";
+    recordButton.innerHTML = `
+    <span class="mic-icon">🎙</span>
+    <span class="record-text">Start Recording</span>
+  `;
 
     await audioContext.close();
 }
